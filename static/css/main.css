@@ -114,6 +114,10 @@ ul {
   border-color: var(--main-color);
 }
 
+.task-prop-box select {
+  text-transform: capitalize;
+}
+
 .task-prop-box textarea {
   resize: none;
 }
@@ -121,7 +125,7 @@ ul {
 .task-prop-box .options {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
   margin-top: 10px;
 }
 
@@ -460,19 +464,19 @@ main .task:hover {
   box-shadow: 2px 2px 5px #00000038;
 }
 
-main .task.top-prior {
+main .task[data-priority="top"] {
   --task-color: var(--top-prior);
 }
 
-main .task.high-prior {
+main .task[data-priority="high"] {
   --task-color: var(--high-prior);
 }
 
-main .task.mid-prior {
+main .task[data-priority="medium"] {
   --task-color: var(--mid-prior);
 }
 
-main .task.low-prior {
+main .task[data-priority="low"] {
   --task-color: var(--low-prior);
 }
 
@@ -485,7 +489,7 @@ main .task .task-name {
   text-overflow: ellipsis;
 }
 
-main .task.top-prior .task-name {
+main .task[data-priority="top"] .task-name {
   color: white;
 }
 
