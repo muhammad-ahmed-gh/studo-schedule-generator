@@ -1,18 +1,31 @@
-#!/usr/bin/env python3
+from flask import Flask, request, jsonify, render_template
+from src.priority import add_study_tasks
 
+app = Flask(__name__)
 
-# --- Set up import path ---
-import os
-import sys
+@app.route("/")
+def homepage():
+    return render_template("index.html")
 
+@app.route("/generate", methods=["POST"])
+def generate_schedule():
+    data = request.get_json(silent=True)
+    result = add_study_tasks(data)
+    return jsonify(result)
 
-csfp = os.path.abspath(os.path.dirname(__file__)) + '/src'
-if csfp not in sys.path:
-    sys.path.insert(0, csfp)
+    # data = request.get_json(silent=True)
+    # if data is None:
+    #     return jsonify({"error": "Invalid or missing JSON body"}), 400
 
-# --- Entry Point ---
-def main(*args: str):
-    ...
+    # if not isinstance(data, list):
+    #     return jsonify({"error": "Expected a JSON list (schedule)"}), 400
+
+    # try:
+    #     result = add_study_tasks(data)
+    # except Exception as e:
+    #     return jsonify({"error": "Failed to generate schedule", "detail": str(e)}), 500
+
+    # return jsonify(result)
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    app.run(debug=True)
