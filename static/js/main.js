@@ -3,14 +3,6 @@ let setupMenuBtn = function () {
   menuBtn.onclick = () => menuBtn.parentElement.classList.toggle("open");
 };
 
-let setTitles = function () {
-  let taskNames = document.querySelectorAll(".task .task-name");
-  taskNames.forEach((taskName) => (taskName.title = taskName.textContent));
-
-  let taskDescs = document.querySelectorAll(".task .task-desc");
-  taskDescs.forEach((taskDesc) => (taskDesc.title = taskDesc.textContent));
-};
-
 let showTaskProperties = function (task) {
   let createLabel = function (forAtt, className, text) {
     let label = document.createElement("label");
@@ -502,7 +494,6 @@ let setupGenerateSchedule = function () {
 };
 
 setupMenuBtn();
-setTitles();
 setupTaskClick();
 setupAddTask();
 setupGenerateSchedule();
