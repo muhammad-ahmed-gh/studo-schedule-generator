@@ -447,7 +447,7 @@ let updateSchedule = function (schedule) {
         taskPriorSpan,
         taskStartSpan,
         taskEndSpan,
-        // taskDescPar
+        taskDescPar
       );
 
       taskElement.onclick = function () {
