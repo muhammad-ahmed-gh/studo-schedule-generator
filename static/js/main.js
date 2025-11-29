@@ -1,3 +1,25 @@
+let setupTodaySettings = function () {
+  const today = new Date();
+  const dayIndex = today.getDay(); // Returns a number: 0 -> Sun, 6 -> Sat
+  const todayName = ["sun", "mon", "tue", "wed", "thur", "fri", "sat"][
+    dayIndex
+  ];
+
+  let numTasks = 0;
+  let days = document.querySelectorAll(".schedule .day");
+  days.forEach((day) => {
+    if (day.querySelector(".head").textContent === todayName) {
+      day.classList.add("today");
+      numTasks = day.querySelector(".tasks").children.length;
+    } else day.classList.remove("today");
+  });
+
+  let numTasksElement = document.querySelector(".num-tasks");
+  numTasksElement.textContent = `${numTasks} ${
+    numTasks === 1 ? "task" : "tasks"
+  }`;
+};
+
 let setupMenuBtn = function () {
   let menuBtn = document.querySelector("header .bars");
   menuBtn.onclick = () => menuBtn.parentElement.classList.toggle("open");
@@ -490,6 +512,8 @@ let setupGenerateSchedule = function () {
       .then((schedule) => {
         updateSchedule(schedule);
       });
+
+    setupTodaySettings();
   };
 };
 
@@ -497,3 +521,4 @@ setupMenuBtn();
 setupTaskClick();
 setupAddTask();
 setupGenerateSchedule();
+setupTodaySettings();
