@@ -438,9 +438,9 @@ let updateSchedule = function (schedule) {
       taskEndSpan.className = "task-end";
       taskEndSpan.textContent = task.end;
 
-      // let taskDescPar = document.createElement("p");
-      // taskDescPar.className = "task-desc";
-      // taskDescPar.textContent = taskDesc;
+      let taskDescPar = document.createElement("p");
+      taskDescPar.className = "task-desc";
+      taskDescPar.textContent = task.desc;
 
       taskElement.append(
         taskNameSpan,
@@ -470,7 +470,7 @@ let scheduleToJson = function () {
         priority: task.dataset.priority,
         start: task.querySelector(".task-start").textContent,
         end: task.querySelector(".task-end").textContent,
-        // desc: task.querySelector(".task-desc").textContent,
+        desc: task.querySelector(".task-desc").textContent,
       };
       schedule[i].push(taskObj);
     });
