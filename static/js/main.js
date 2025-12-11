@@ -513,9 +513,8 @@ let setupGenerateSchedule = function () {
       .then((response) => response.json())
       .then((schedule) => {
         updateSchedule(schedule);
+        setupTodaySettings();
       });
-
-    setupTodaySettings();
   };
 };
 
