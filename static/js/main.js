@@ -173,6 +173,7 @@ let showTaskProperties = function (task) {
     task.remove();
     overlay.remove();
     taskPropBox.remove();
+    setupTodaySettings();
   };
 
   let cancelBtn = document.createElement("button");
@@ -398,6 +399,7 @@ let showAddTaskProperties = function () {
 
     overlay.remove();
     taskPropBox.remove();
+    setupTodaySettings();
   };
 
   let cancelBtn = document.createElement("button");
