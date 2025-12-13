@@ -6,7 +6,7 @@ function setupMenuBtn() {
   if (!menuBtn) return;
 
   menuBtn.onclick = () =>
-    menuBtn.parentElement.classList.toggle("open");
+    menuBtn.parentElement.classList.toggle("open");  
 }
 
 /**************************************
