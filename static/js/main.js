@@ -263,6 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTaskClick();
   setupButtons();
 });
+
 // order function 
 
 function sortTasks(tasks) {
