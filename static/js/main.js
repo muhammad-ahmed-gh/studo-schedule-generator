@@ -263,4 +263,82 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTaskClick();
   setupButtons();
 });
-// jtj
+// order function 
+
+function sortTasks(tasks) {
+  return tasks.sort((a, b) => {
+   
+    const pDiff =
+      priorityValue(a.priority) - priorityValue(b.priority);
+
+    if (pDiff !== 0) return pDiff;
+
+    return a.start.localeCompare(b.start);
+  });
+}
+
+function sortSchedule(schedule) {
+  return schedule.map((dayTasks) => sortTasks(dayTasks));
+}
+// sorting function 
+
+function priorityValue(p) {
+  switch (p) {
+    case "top": return 1;
+    case "high": return 2;
+    case "medium": return 3;
+    case "low": return 4;
+    default: return 5;
+  }
+}
+//Evaluation
+
+function evaluateSchedule(schedule) {
+  let report = {
+    totalTasks: 0,
+    topPriority: 0,
+    conflicts: 0,
+  };
+
+  schedule.forEach((day) => {
+    report.totalTasks += day.length;
+
+    day.forEach((task, i) => {
+      if (task.priority === "top") report.topPriority++;
+
+      if (i > 0) {
+        const prev = day[i - 1];
+        if (task.start < prev.end) {
+          report.conflicts++;
+        }
+      }
+    });
+  });
+
+  return report;
+}
+// generate linking 
+
+async function handleGenerateClick() {
+  try {
+    let schedule = readScheduleFromDOM();
+
+    schedule = sortSchedule(schedule);
+
+    const evaluation = evaluateSchedule(schedule);
+    console.log("Evaluation:", evaluation);
+
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ schedule }),
+    });
+
+    const data = await response.json();
+    renderSchedule(data.schedule);
+
+  } catch (err) {
+    console.error("Generate error:", err);
+    alert("An error occurred. Check console.");
+  }
+}
