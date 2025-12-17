@@ -263,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTaskClick();
   setupButtons();
 });
-
 // order function 
 
 function sortTasks(tasks) {
@@ -343,3 +342,4 @@ async function handleGenerateClick() {
     alert("An error occurred. Check console.");
   }
 }
+  

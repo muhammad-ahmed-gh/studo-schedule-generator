@@ -4,7 +4,10 @@ DEFAULT_DAY_END = '16:00'
 
 def add_study_tasks(schedule: list[list[dict]]) -> list:
     newdays = [[] for _ in range(7)]
-    days = (day or [{'end': DEFAULT_DAY_END}] for day in schedule)
+    days = ([task for task in day
+             if task['taskName'].split()[-1] != 'Study']
+            or [{'end': DEFAULT_DAY_END}]
+            for day in schedule)
     day_endings = [
         sorted(day, key=lambda t: t['end'])[-1]['end'].split(':')
         for day in days
@@ -13,9 +16,7 @@ def add_study_tasks(schedule: list[list[dict]]) -> list:
         for task in day:
             subject = ' '.join(task['taskName'].split()[:-1])
             type = task['taskName'].split()[-1].lower()
-            if type == 'study':
-                continue
-            elif type == 'lecture':
+            if type == 'lecture':
                 tomorrow = (i + 1) % 7
                 hour, minute = [int(x) for x in day_endings[tomorrow]]
                 newdays[(i + 1) % 7].append({'taskName': f'{subject} Study',
