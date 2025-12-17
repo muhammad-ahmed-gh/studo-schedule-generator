@@ -263,4 +263,30 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTaskClick();
   setupButtons();
 });
-// jtj
+
+// evaluation
+
+function evaluateSchedule(schedule) {
+  let report = {
+    totalTasks: 0,
+    topPriority: 0,
+    conflicts: 0,
+  };
+
+  schedule.forEach((day) => {
+    report.totalTasks += day.length;
+
+    day.forEach((task, i) => {
+      if (task.priority === "top") report.topPriority++;
+
+      if (i > 0) {
+        const prev = day[i - 1];
+        if (task.start < prev.end) {
+          report.conflicts++;
+        }
+      }
+    });
+  });
+
+  return report;
+}
