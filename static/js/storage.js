@@ -20,7 +20,8 @@ export function scheduleToJson() {
 export function loadUserInfo() {
   let scheduleString = window.localStorage.getItem("schedule");
 
-  if (scheduleString) return JSON.parse(scheduleString);
+  if (scheduleString !== null) return JSON.parse(scheduleString);
+  return null;
 }
 
 export function saveUserInfo(info) {

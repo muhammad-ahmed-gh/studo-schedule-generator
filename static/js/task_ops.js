@@ -1,3 +1,6 @@
+import {saveUserInfo, scheduleToJson} from "./storage.js";
+import {setupTodaySettings} from "./chores.js";
+
 export function addTaskToSchedule(
   taskName,
   taskPrior,

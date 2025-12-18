@@ -255,7 +255,9 @@ let setupGenerateBtn = function () {
   };
 };
 
-updateSchedule(loadUserInfo());
+let userInfo = loadUserInfo();
+if(userInfo)
+  updateSchedule(userInfo);
 setupMenuBtn();
 setupTaskClick();
 setupAddTaskBtn();
