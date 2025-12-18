@@ -1,10 +1,9 @@
-import { setupMenuBtn, setTitles, setupTodaySettings } from "./chores.js";
-import { loadUserInfo, saveUserInfo, scheduleToJson } from "./storage.js";
-import { addTaskToSchedule, showTaskProperties } from "./task_ops.js";
+import * as chores from "./chores.js";
+import * as storage from "./storage.js";
 
 let setupTaskClick = function () {
   let tasks = document.querySelectorAll(".task");
-  tasks.forEach((task) => (task.onclick = () => showTaskProperties(task)));
+  tasks.forEach((task) => (task.onclick = () => chores.showTaskProperties(task)));
 };
 
 let showAddTaskProperties = function () {
@@ -138,7 +137,7 @@ let showAddTaskProperties = function () {
   doneBtn.className = `btn done-btn`;
   doneBtn.textContent = "Done";
   doneBtn.onclick = () => {
-    addTaskToSchedule(
+    chores.addTaskToSchedule(
       nameField.value,
       priorList.value,
       dayList.value,
@@ -146,13 +145,17 @@ let showAddTaskProperties = function () {
       endTimeField.value,
       descField.value
     );
-    saveUserInfo({
-      schedule: scheduleToJson(),
+
+    let schedule = storage.scheduleToJson();
+    schedule = chores.sortSchedule(schedule);
+    chores.updateSchedule(schedule);
+    storage.saveUserInfo({
+      schedule: schedule,
     });
 
     overlay.remove();
     taskPropBox.remove();
-    setupTodaySettings();
+    chores.setupTodaySettings();
   };
 
   let cancelBtn = document.createElement("button");
@@ -184,82 +187,30 @@ let setupAddTaskBtn = function () {
   addTaskBtn.onclick = showAddTaskProperties;
 };
 
-let updateSchedule = function (schedule) {
-  // remove all tasks
-  let tasks = document.querySelectorAll(".tasks");
-  tasks.forEach((tasksSection) => {
-    tasksSection.innerHTML = "";
-  });
-
-  // insert tasks
-  let days = document.querySelectorAll(".schedule .day .tasks");
-  schedule.forEach((dayTasks, i) => {
-    dayTasks.forEach((task) => {
-      let taskElement = document.createElement("div");
-      taskElement.className = "task";
-      taskElement.dataset.priority = task.priority;
-
-      let taskNameSpan = document.createElement("span");
-      taskNameSpan.className = "task-name";
-      taskNameSpan.textContent = task.taskName;
-
-      let taskPriorSpan = document.createElement("span");
-      taskPriorSpan.className = "task-prior";
-      taskPriorSpan.textContent = `${task.priority} priority`;
-
-      let taskStartSpan = document.createElement("span");
-      taskStartSpan.className = "task-start";
-      taskStartSpan.textContent = task.start;
-
-      let taskEndSpan = document.createElement("span");
-      taskEndSpan.className = "task-end";
-      taskEndSpan.textContent = task.end;
-
-      let taskDescPar = document.createElement("p");
-      taskDescPar.className = "task-desc";
-      taskDescPar.textContent = task.desc;
-
-      taskElement.append(
-        taskNameSpan,
-        taskPriorSpan,
-        taskStartSpan,
-        taskEndSpan,
-        taskDescPar
-      );
-
-      taskElement.onclick = function () {
-        showTaskProperties(taskElement);
-      };
-
-      days[i].appendChild(taskElement);
-    });
-  });
-};
-
 let setupGenerateBtn = function () {
   let generateBtn = document.querySelector("main .generate");
   generateBtn.onclick = function () {
     fetch("/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(scheduleToJson()),
+      body: JSON.stringify(storage.scheduleToJson()),
     })
       .then((response) => response.json())
       .then((schedule) => {
-        updateSchedule(schedule);
-        saveUserInfo({
-          schedule: scheduleToJson(),
+        chores.updateSchedule(chores.sortSchedule(schedule));
+        storage.saveUserInfo({
+          schedule: storage.scheduleToJson(),
         });
-        setupTodaySettings();
+        chores.setupTodaySettings();
       });
   };
 };
 
-let userInfo = loadUserInfo();
+let userInfo = storage.loadUserInfo();
 if(userInfo)
-  updateSchedule(userInfo);
-setupMenuBtn();
+  chores.updateSchedule(userInfo);
+chores.setupMenuBtn();
 setupTaskClick();
 setupAddTaskBtn();
 setupGenerateBtn();
-setupTodaySettings();
+chores.setupTodaySettings();
