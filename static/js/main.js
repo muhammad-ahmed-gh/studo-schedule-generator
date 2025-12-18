@@ -263,31 +263,30 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTaskClick();
   setupButtons();
 });
-// order function 
 
-function sortTasks(tasks) {
-  return tasks.sort((a, b) => {
-   
-    const pDiff =
-      priorityValue(a.priority) - priorityValue(b.priority);
+// evaluation
 
-    if (pDiff !== 0) return pDiff;
+function evaluateSchedule(schedule) {
+  let report = {
+    totalTasks: 0,
+    topPriority: 0,
+    conflicts: 0,
+  };
 
-    return a.start.localeCompare(b.start);
+  schedule.forEach((day) => {
+    report.totalTasks += day.length;
+
+    day.forEach((task, i) => {
+      if (task.priority === "top") report.topPriority++;
+
+      if (i > 0) {
+        const prev = day[i - 1];
+        if (task.start < prev.end) {
+          report.conflicts++;
+        }
+      }
+    });
   });
-}
 
-function sortSchedule(schedule) {
-  return schedule.map((dayTasks) => sortTasks(dayTasks));
-}
-// sorting function 
-
-function priorityValue(p) {
-  switch (p) {
-    case "top": return 1;
-    case "high": return 2;
-    case "medium": return 3;
-    case "low": return 4;
-    default: return 5;
-  }
+  return report;
 }
