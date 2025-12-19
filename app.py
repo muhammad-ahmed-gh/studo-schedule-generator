@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from src.priority import add_study_tasks
+from src.priority import Scheduler
 
 app = Flask(__name__)
 
@@ -10,7 +10,8 @@ def homepage():
 @app.route("/generate", methods=["POST"])
 def generate_schedule():
     data = request.get_json(silent=True)
-    result = add_study_tasks(data)
+    scheduler = Scheduler(data)
+    result = scheduler.generate_study_tasks()
     return jsonify(result)
 
 if __name__ == '__main__':
