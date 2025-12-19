@@ -1,35 +1,39 @@
-import * as util from "./util.js";
+import { Util } from "./Util.js";
 import { AppStorage } from "./AppStorage.js";
 import { Task } from "./Task.js";
-import {Valid} from "./Valid.js";
+import { Valid } from "./Valid.js";
 
 class Main {
   static showAddTaskModal() {
-    let createLabel = function (forAtt, className, text) {
-      let label = document.createElement("label");
-      label.className = className;
-      label.setAttribute("for", forAtt);
-      label.textContent = text;
-      return label;
-    };
+    let taskPropBox = Util.createEle({
+      tagName: "div",
+      className: "task-prop-box",
+    });
 
-    let taskPropBox = document.createElement("div");
-    let overlay = document.createElement("div");
-
-    taskPropBox.className = "task-prop-box";
-    overlay.className = "overlay";
+    let overlay = Util.createEle({
+      tagName: "div",
+      className: "overlay",
+    });
 
     // create box content
     // box title
-    let boxTitle = document.createElement("span");
-    boxTitle.className = "task-prop-box-title";
-    boxTitle.textContent = "task properties";
+    let boxTitle = Util.createEle({
+      tagName: "span",
+      className: "task-prop-box-title",
+      textContent: "task properties",
+    });
 
     // close box button
-    let closeIcon = document.createElement("i");
-    closeIcon.className = "fa-solid fa-xmark";
-    let closeBtn = document.createElement("button");
-    closeBtn.className = "close-btn";
+    let closeIcon = Util.createEle({
+      tagName: "i",
+      className: "fa-solid fa-xmark",
+    });
+
+    let closeBtn = Util.createEle({
+      tagName: "button",
+      className: "close-btn",
+    });
+
     closeBtn.appendChild(closeIcon);
     closeBtn.onclick = () => {
       overlay.remove();
@@ -37,31 +41,49 @@ class Main {
     };
 
     // add input fields
-    let fieldContainer = document.createElement("div");
-    fieldContainer.className = "task-prop-field";
+    let fieldContainer = Util.createEle({
+      tagName: "div",
+      className: "task-prop-field",
+    });
     // name
-    let nameLabel = createLabel("task-name-field", "task-prop-label", "Name");
+    let nameLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Name",
+    });
+    nameLabel.setAttribute("for", "task-name-field");
 
-    let nameField = document.createElement("input");
+    let nameField = Util.createEle({
+      tagName: "input",
+      className: "task-prop-input-field",
+      id: "task-name-field",
+    });
     nameField.type = "text";
-    nameField.id = "task-name-field";
-    nameField.className = "task-prop-input-field";
 
     let nameFieldContainer = fieldContainer.cloneNode(true);
     nameFieldContainer.append(nameLabel, nameField);
 
     // type
-    let typeLabel = createLabel("task-type-field", "task-prop-label", "Type");
+    let typeLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Type",
+    });
+    nameLabel.setAttribute("for", "task-type-field");
 
-    let typeList = document.createElement("select");
-    typeList.id = "task-type-field";
-    typeList.className = "task-prop-input-field";
+    let typeList = Util.createEle({
+      tagName: "select",
+      className: "task-prop-input-field",
+      id: "task-type-field",
+    });
 
     let types = ["lecture", "quiz", "assignment", "exam", "study", "other"];
     for (let type of types) {
-      let option = document.createElement("option");
+      let option = Util.createEle({
+        tagName: "option",
+        textContent: type,
+      });
       option.value = type;
-      option.textContent = type;
       typeList.appendChild(option);
     }
 
@@ -72,21 +94,26 @@ class Main {
     typeFieldContainer.append(typeLabel, typeList);
 
     // priority
-    let priorLabel = createLabel(
-      "task-prior-field",
-      "task-prop-label",
-      "Priority"
-    );
+    let priorLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Priority",
+    });
+    priorLabel.setAttribute("for", "task-prior-field");
 
-    let priorList = document.createElement("select");
-    priorList.id = "task-prior-field";
-    priorList.className = "task-prop-input-field";
+    let priorList = Util.createEle({
+      tagName: "select",
+      className: "task-prop-input-field",
+      id: "task-prior-field",
+    });
 
     let priors = ["top", "high", "medium", "low", "none"];
     for (let prior of priors) {
-      let option = document.createElement("option");
+      let option = Util.createEle({
+        tagName: "option",
+        textContent: prior,
+      });
       option.value = prior;
-      option.textContent = prior;
       priorList.appendChild(option);
     }
     priorList.value = "none";
@@ -95,17 +122,26 @@ class Main {
     priorFieldContainer.append(priorLabel, priorList);
 
     // day
-    let dayLabel = createLabel("task-day-field", "task-prop-label", "Day");
+    let dayLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Day",
+    });
+    dayLabel.setAttribute("for", "task-day-field");
 
-    let dayList = document.createElement("select");
-    dayList.id = "task-day-field";
-    dayList.className = "task-prop-input-field";
+    let dayList = Util.createEle({
+      tagName: "select",
+      className: "task-prop-input-field",
+      id: "task-day-field",
+    });
 
     let days = ["sat", "sun", "mon", "tue", "wed", "thur", "fri"];
     for (let day of days) {
-      let option = document.createElement("option");
+      let option = Util.createEle({
+        tagName: "option",
+        textContent: day,
+      });
       option.value = day;
-      option.textContent = day;
       dayList.appendChild(option);
     }
 
@@ -113,49 +149,69 @@ class Main {
     dayFieldContainer.append(dayLabel, dayList);
 
     // start time
-    let startTimeLabel = createLabel(
-      "task-start-field",
-      "task-prop-label",
-      "Start"
-    );
-    let startTimeField = document.createElement("input");
+    let startTimeLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Start",
+    });
+    startTimeLabel.setAttribute("for", "task-start-field");
+
+    let startTimeField = Util.createEle({
+      tagName: "input",
+      id: "task-start-field",
+      className: "task-prop-input-field",
+    });
     startTimeField.type = "time";
-    startTimeField.id = "task-start-field";
-    startTimeField.className = "task-prop-input-field";
 
     let startTimeFieldContainer = fieldContainer.cloneNode(true);
     startTimeFieldContainer.append(startTimeLabel, startTimeField);
 
     // end time
-    let endTimeLabel = createLabel("task-end-field", "task-prop-label", "End");
-    let endTimeField = document.createElement("input");
+    let endTimeLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "End",
+    });
+    endTimeField.setAttribute("for", "task-end-field");
+
+    let endTimeField = Util.createEle({
+      tagName: "input",
+      className: "task-prop-input-field",
+      id: "task-end-field",
+    });
     endTimeField.type = "time";
-    endTimeField.id = "task-end-field";
-    endTimeField.className = "task-prop-input-field";
 
     let endTimeFieldContainer = fieldContainer.cloneNode(true);
     endTimeFieldContainer.append(endTimeLabel, endTimeField);
 
     // description
-    let descLabel = createLabel(
-      "task-desc-field",
-      "task-prop-label",
-      "Description"
-    );
-    let descField = document.createElement("textarea");
-    descField.id = "task-desc-field";
-    descField.className = "task-prop-input-field";
+    let descLabel = Util.createEle({
+      tagName: "label",
+      className: "task-prop-label",
+      textContent: "Description",
+    });
+    descLabel.setAttribute("for", "task-desc-field");
+
+    let descField = Util.createEle({
+      tagName: "textarea",
+      className: "task-prop-input-field",
+      id: "task-desc-field",
+    });
 
     let descFieldContainer = fieldContainer.cloneNode(true);
     descFieldContainer.append(descLabel, descField);
 
     // options
-    let optionsSection = document.createElement("div");
-    optionsSection.className = "options";
+    let optionsSection = Util.createEle({
+      tagName: "div",
+      className: "options",
+    });
 
-    let doneBtn = document.createElement("button");
-    doneBtn.className = `btn done-btn`;
-    doneBtn.textContent = "Done";
+    let doneBtn = Util.createEle({
+      tagName: "button",
+      className: "btn done-btn",
+      textContent: "Done",
+    });
     doneBtn.onclick = () => {
       if (
         Valid.validateNewTask(
@@ -176,21 +232,23 @@ class Main {
         Task.addToSchedule(task, dayList.value);
 
         let schedule = AppStorage.scheduleToJson();
-        schedule = util.sortSchedule(schedule);
-        util.updateSchedule(schedule);
+        schedule = Util.sortSchedule(schedule);
+        Util.updateSchedule(schedule);
         AppStorage.saveSchedule({
           schedule: schedule,
         });
 
         overlay.remove();
         taskPropBox.remove();
-        util.setupTodaySettings();
+        Util.setupTodaySettings();
       }
     };
 
-    let cancelBtn = document.createElement("button");
-    cancelBtn.className = `btn cancel-btn`;
-    cancelBtn.textContent = "Cancel";
+    let cancelBtn = Util.createEle({
+      tagName: "button",
+      className: "btn cancel-btn",
+      textContent: "Cancel",
+    });
     cancelBtn.onclick = () => {
       overlay.remove();
       taskPropBox.remove();
@@ -249,18 +307,18 @@ class Main {
       })
         .then((response) => response.json())
         .then((schedule) => {
-          util.updateSchedule(util.sortSchedule(schedule));
+          Util.updateSchedule(Util.sortSchedule(schedule));
           AppStorage.saveSchedule({
             schedule: AppStorage.scheduleToJson(),
           });
-          util.setupTodaySettings();
+          Util.setupTodaySettings();
         });
     };
   }
 
   static loadPageInfo() {
     let data = AppStorage.loadUserInfo();
-    if (data.schedule) util.updateSchedule(data.schedule);
+    if (data.schedule) Util.updateSchedule(data.schedule);
 
     let userNameText = document.querySelector(".user .text");
     userNameText.textContent = data.username || "Awesome Student";
@@ -269,10 +327,10 @@ class Main {
   static init() {
     this.loadPageInfo();
     this.setupEditUserBtn();
-    util.setupMenuBtn();
+    Util.setupMenuBtn();
     this.setupAddTaskBtn();
     this.setupGenerateBtn();
-    util.setupTodaySettings();
+    Util.setupTodaySettings();
   }
 }
 
