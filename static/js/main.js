@@ -1,6 +1,6 @@
-import * as util from "util.js";
-import { AppStorage } from "AppStorage.js";
-import { Task } from "Task.js";
+import * as util from "./util.js";
+import { AppStorage } from "./AppStorage.js";
+import { Task } from "./Task.js";
 
 class Main {
   static showAddTaskModal() {

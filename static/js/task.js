@@ -1,5 +1,5 @@
-import * as util from "util.js";
-import { AppStorage } from "AppStorage.js";
+import * as util from "./util.js";
+import { AppStorage } from "./AppStorage.js";
 
 export class Task {
   static deleteTask(task) {

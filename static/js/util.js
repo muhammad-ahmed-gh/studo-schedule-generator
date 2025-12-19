@@ -1,4 +1,4 @@
-import { Task } from "Task.js";
+import { Task } from "./Task.js";
 
 export function createEle(data) {
   let element = document.createElement(data.tagName);
