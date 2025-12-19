@@ -56,7 +56,7 @@ class Main {
     typeList.id = "task-type-field";
     typeList.className = "task-prop-input-field";
 
-    let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
+    let types = ["lecture", "quiz", "assignment", "exam", "study", "other"];
     for (let type of types) {
       let option = document.createElement("option");
       option.value = type;
@@ -81,13 +81,14 @@ class Main {
     priorList.id = "task-prior-field";
     priorList.className = "task-prop-input-field";
 
-    let priors = ["top", "high", "medium", "low"];
+    let priors = ["top", "high", "medium", "low", "none"];
     for (let prior of priors) {
       let option = document.createElement("option");
       option.value = prior;
       option.textContent = prior;
       priorList.appendChild(option);
     }
+    priorList.value = "none";
 
     let priorFieldContainer = fieldContainer.cloneNode(true);
     priorFieldContainer.append(priorLabel, priorList);

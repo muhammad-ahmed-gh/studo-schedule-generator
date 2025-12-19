@@ -95,7 +95,7 @@ export class Task {
       id: "task-type-field",
     });
 
-    let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
+    let types = ["lecture", "quiz", "assignment", "exam", "study", "other"];
     for (let type of types) {
       let option = util.createEle({
         tagName: "option",
@@ -124,7 +124,7 @@ export class Task {
       id: "task-prior-field",
     });
 
-    let priors = ["top", "high", "medium", "low"];
+    let priors = ["top", "high", "medium", "low", "none"];
     for (let prior of priors) {
       let option = util.createEle({
         tagName: "option",

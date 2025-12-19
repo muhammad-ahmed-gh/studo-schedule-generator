@@ -19,6 +19,7 @@
   --high-prior: #fa5656;
   --mid-prior: #ffbb00;
   --low-prior: #2ee677;
+  --none-prior: #adadad;
 
   /* scroll */
   --scroll-width: 8px;
@@ -482,6 +483,10 @@ main .task[data-priority="medium"] {
 
 main .task[data-priority="low"] {
   --task-color: var(--low-prior);
+}
+
+main .task[data-priority="none"] {
+  --task-color: var(--none-prior);
 }
 
 main .task .task-name {
