@@ -170,7 +170,7 @@ class Main {
       let schedule = AppStorage.scheduleToJson();
       schedule = util.sortSchedule(schedule);
       util.updateSchedule(schedule);
-      AppStorage.saveUserInfo({
+      AppStorage.saveSchedule({
         schedule: schedule,
       });
 
@@ -204,6 +204,27 @@ class Main {
     document.body.append(overlay, taskPropBox);
   }
 
+  static setupEditUserBtn() {
+    let editUserBtn = document.querySelector(".edit-user");
+    let userNameText = document.querySelector(".user .text");
+
+    userNameText.setAttribute("contenteditable", false);
+
+    editUserBtn.onclick = () => {
+      userNameText.setAttribute("contenteditable", true);
+      userNameText.focus();
+
+      let oldUserName = userNameText.textContent;
+      userNameText.onblur = () => {
+        userNameText.setAttribute("contenteditable", false);
+        if (userNameText.textContent === "")
+          userNameText.textContent = oldUserName;
+        
+        window.localStorage.setItem("username", userNameText.textContent);
+      };
+    };
+  }
+
   static setupAddTaskBtn() {
     let addTaskBtn = document.querySelector("main .add-task");
     addTaskBtn.onclick = Main.showAddTaskModal;
@@ -220,7 +241,7 @@ class Main {
         .then((response) => response.json())
         .then((schedule) => {
           util.updateSchedule(util.sortSchedule(schedule));
-          AppStorage.saveUserInfo({
+          AppStorage.saveSchedule({
             schedule: AppStorage.scheduleToJson(),
           });
           util.setupTodaySettings();
@@ -229,12 +250,16 @@ class Main {
   }
 
   static loadPageInfo() {
-    let userInfo = AppStorage.loadUserInfo();
-    if (userInfo) util.updateSchedule(userInfo);
+    let data = AppStorage.loadUserInfo();
+    if (data.schedule) util.updateSchedule(data.schedule);
+
+    let userNameText = document.querySelector(".user .text");
+    userNameText.textContent = data.username || "Awesome Student";
   }
 
   static init() {
     this.loadPageInfo();
+    this.setupEditUserBtn();
     util.setupMenuBtn();
     this.setupAddTaskBtn();
     this.setupGenerateBtn();

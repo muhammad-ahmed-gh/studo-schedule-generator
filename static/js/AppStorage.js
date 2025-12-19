@@ -26,12 +26,18 @@ export class AppStorage {
 
   static loadUserInfo() {
     let scheduleString = window.localStorage.getItem("schedule");
+    let scheduleParsed =
+      scheduleString !== null ? JSON.parse(scheduleString) : null;
 
-    if (scheduleString !== null) return JSON.parse(scheduleString);
-    return null;
+    let username = window.localStorage.getItem("username");
+
+    return {
+      schedule: scheduleParsed,
+      username: username,
+    };
   }
 
-  static saveUserInfo(info) {
-    window.localStorage.setItem("schedule", JSON.stringify(info.schedule));
+  static saveSchedule(schedule) {
+    window.localStorage.setItem("schedule", JSON.stringify(schedule.schedule));
   }
 }

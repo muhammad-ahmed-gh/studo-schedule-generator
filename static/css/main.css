@@ -357,6 +357,19 @@ main .user {
   text-transform: uppercase;
 }
 
+main .user .text:focus {
+  outline: 1px dashed var(--main-color);
+  border-radius: 5px;
+}
+
+main .edit-user {
+  position: relative;
+  font-size: 16px;
+  top: -27px;
+  right: 6px;
+  cursor: pointer;
+}
+
 main .msg {
   margin: 20px auto;
   padding: 15px;

@@ -4,7 +4,7 @@ import { AppStorage } from "./AppStorage.js";
 export class Task {
   static deleteTask(task) {
     task.remove();
-    AppStorage.saveUserInfo({
+    AppStorage.saveSchedule({
       schedule: AppStorage.scheduleToJson(),
     });
     util.setupTodaySettings();
@@ -218,7 +218,7 @@ export class Task {
 
       let schedule = util.sortSchedule(AppStorage.scheduleToJson());
       util.updateSchedule(schedule);
-      AppStorage.saveUserInfo({
+      AppStorage.saveSchedule({
         schedule: AppStorage.scheduleToJson(),
       });
 
