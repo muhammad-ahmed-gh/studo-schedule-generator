@@ -1,12 +1,12 @@
-class Valid {
-  isAfter(time1, time2) {
+export class Valid {
+  static isAfter(time1, time2) {
     // [HH, MM]
     if (time1[0] > time2[0]) return true; // hours
     if (time1[0] === time2[0] && time1[1] > time2[1]) return true; // minutes
     return false;
   }
 
-  validateNewTask(name, start, end) {
+  static validateNewTask(name, start, end) {
     if (!name.trim() || !start.trim() || !end.trim()) return false;
 
     // check start is before end
@@ -23,7 +23,7 @@ class Valid {
     return true;
   }
 
-  validateEditedTask(editedTask, name, start, end) {
+  static validateEditedTask(editedTask, name, start, end) {
     if (name.trim() === "" || start.trim() === "" || end.trim() === "")
       return false;
 
