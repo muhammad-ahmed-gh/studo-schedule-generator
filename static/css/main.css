@@ -189,6 +189,7 @@ header {
   width: 100%;
   border-bottom: 1px var(--main-border-color) solid;
   background-color: white;
+  z-index: 10;
 }
 
 header .container {
