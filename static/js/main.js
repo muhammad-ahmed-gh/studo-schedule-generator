@@ -1,12 +1,12 @@
 import * as chores from "./chores.js";
 import * as storage from "./storage.js";
 
-let setupTaskClick = function () {
-  let tasks = document.querySelectorAll(".task");
-  tasks.forEach(
-    (task) => (task.onclick = () => chores.showTaskInfoModal(task))
-  );
-};
+// let setupTaskClick = function () {
+//   let tasks = document.querySelectorAll(".task");
+//   tasks.forEach(
+//     (task) => (task.onclick = () => chores.showTaskInfoModal(task))
+//   );
+// };
 
 let showAddTaskModal = function () {
   let createLabel = function (forAtt, className, text) {
@@ -231,10 +231,18 @@ let setupGenerateBtn = function () {
   };
 };
 
-let userInfo = storage.loadUserInfo();
-if (userInfo) chores.updateSchedule(userInfo);
-chores.setupMenuBtn();
-setupTaskClick();
-setupAddTaskBtn();
-setupGenerateBtn();
-chores.setupTodaySettings();
+let loadPageInfo = function () {
+  let userInfo = storage.loadUserInfo();
+  if (userInfo) chores.updateSchedule(userInfo);
+}
+
+let initialize = function () {
+  loadPageInfo();
+  chores.setupMenuBtn();
+  // setupTaskClick();
+  setupAddTaskBtn();
+  setupGenerateBtn();
+  chores.setupTodaySettings();
+}
+
+initialize();
