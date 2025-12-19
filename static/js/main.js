@@ -1,12 +1,7 @@
 import * as chores from "./chores.js";
 import * as storage from "./storage.js";
+import {Task} from "./task.js"
 
-// let setupTaskClick = function () {
-//   let tasks = document.querySelectorAll(".task");
-//   tasks.forEach(
-//     (task) => (task.onclick = () => chores.showTaskInfoModal(task))
-//   );
-// };
 
 let showAddTaskModal = function () {
   let createLabel = function (forAtt, className, text) {
@@ -160,15 +155,16 @@ let showAddTaskModal = function () {
   doneBtn.className = `btn done-btn`;
   doneBtn.textContent = "Done";
   doneBtn.onclick = () => {
-    chores.addTaskToSchedule(
+    let task = Task.createTask(
       nameField.value,
       typeList.value,
       priorList.value,
-      dayList.value,
       startTimeField.value,
       endTimeField.value,
-      descField.value
+      descField.value,
+      false
     );
+    Task.addToSchedule(task, dayList.value);
 
     let schedule = storage.scheduleToJson();
     schedule = chores.sortSchedule(schedule);
@@ -239,7 +235,6 @@ let loadPageInfo = function () {
 let initialize = function () {
   loadPageInfo();
   chores.setupMenuBtn();
-  // setupTaskClick();
   setupAddTaskBtn();
   setupGenerateBtn();
   chores.setupTodaySettings();

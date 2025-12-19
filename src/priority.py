@@ -6,10 +6,10 @@ def add_study_tasks(schedule: list[list[dict]]) -> list:
     newdays = [[] for _ in range(7)]
     days = ([task for task in day
              if task['taskName'].split()[-1] != 'Study']
-            or [{'end': DEFAULT_DAY_END}]
+            or [{'taskEnd': DEFAULT_DAY_END}]
             for day in schedule)
     day_endings = [
-        sorted(day, key=lambda t: t['end'])[-1]['end'].split(':')
+        sorted(day, key=lambda t: t['taskEnd'])[-1]['taskEnd'].split(':')
         for day in days
     ]
     for i, day in enumerate(schedule):
@@ -20,9 +20,10 @@ def add_study_tasks(schedule: list[list[dict]]) -> list:
                 tomorrow = (i + 1) % 7
                 hour, minute = [int(x) for x in day_endings[tomorrow]]
                 newdays[(i + 1) % 7].append({'taskName': f'{subject} Study',
-                                            'start': f'{hour+2:02}:{minute:02}',
-                                            'end': f'{hour+4:02}:{minute:02}',
-                                            'priority': 'low'})
+                                            'taskStart': f'{hour+2:02}:{minute:02}',
+                                            'taskEnd': f'{hour+4:02}:{minute:02}',
+                                            'taskPrior': 'low',
+                                            'isGenerated': True})
                 day_endings[tomorrow] = (hour+2, minute)
             newdays[i].append(task)
     return newdays

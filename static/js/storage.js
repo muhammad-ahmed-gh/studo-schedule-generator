@@ -7,7 +7,7 @@ export function scheduleToJson() {
       let taskObj = {
         taskName: task.querySelector(".task-name").textContent,
         taskType: task.querySelector(".task-type").textContent,
-        taskPriority: task.dataset.priority,
+        taskPrior: task.dataset.priority,
         taskStart: task.querySelector(".task-start").textContent,
         taskEnd: task.querySelector(".task-end").textContent,
         taskDesc: task.querySelector(".task-desc").textContent,

@@ -1,4 +1,15 @@
-import { saveUserInfo, scheduleToJson } from "./storage.js";
+import { Task } from "./task.js";
+
+export function createEle(data) {
+  let element = document.createElement(data.tagName);
+
+  if (data.className) element.className = data.className;
+  if (data.id) element.id = data.id;
+  if (data.textContent) element.textContent = data.textContent;
+  if (data.title) element.title = data.title;
+
+  return element;
+}
 
 export function setupTodaySettings() {
   const today = new Date();
@@ -30,14 +41,6 @@ export function setupMenuBtn() {
   }
 }
 
-export function setTitles() {
-  const taskNames = document.querySelectorAll(".task .task-name");
-  for (let taskName of taskNames) taskName.title = taskName.textContent;
-
-  const taskDescs = document.querySelectorAll(".task .task-desc");
-  for (let taskDesc of taskDescs) taskDesc.title = taskDesc.textContent;
-}
-
 let sortDayTasks = function (tasks) {
   return tasks.slice().sort((a, b) => {
     const [aH, aM] = a.taskStart.split(":").map(Number);
@@ -63,12 +66,13 @@ export function updateSchedule(schedule) {
     dayTasks.forEach((task) => {
       let taskElement = document.createElement("div");
       taskElement.className = "task";
-      taskElement.dataset.priority = task.taskPriority;
-      taskElement.dataset.isGenerated = task.isGenerated? "true" : "false";
+      taskElement.dataset.priority = task.taskPrior;
+      taskElement.dataset.isGenerated = task.isGenerated ? "true" : "false";
 
       let taskNameSpan = document.createElement("span");
       taskNameSpan.className = "task-name";
       taskNameSpan.textContent = task.taskName;
+      taskNameSpan.title = task.taskName;
 
       let taskTypeSpan = document.createElement("span");
       taskTypeSpan.className = "task-type";
@@ -76,7 +80,7 @@ export function updateSchedule(schedule) {
 
       let taskPriorSpan = document.createElement("span");
       taskPriorSpan.className = "task-prior";
-      taskPriorSpan.textContent = `${task.taskPriority} priority`;
+      taskPriorSpan.textContent = `${task.taskPrior} priority`;
 
       let taskStartSpan = document.createElement("span");
       taskStartSpan.className = "task-start";
@@ -89,6 +93,7 @@ export function updateSchedule(schedule) {
       let taskDescPar = document.createElement("p");
       taskDescPar.className = "task-desc";
       taskDescPar.textContent = task.taskDesc;
+      taskDescPar.title = task.taskDesc;
 
       taskElement.append(
         taskNameSpan,
@@ -100,276 +105,10 @@ export function updateSchedule(schedule) {
       );
 
       taskElement.onclick = function () {
-        showTaskInfoModal(taskElement);
+        Task.showProperties(taskElement);
       };
 
       days[i].appendChild(taskElement);
     });
   });
-}
-
-export function addTaskToSchedule(
-  taskName,
-  taskType,
-  taskPrior,
-  taskDay,
-  taskStart,
-  taskEnd,
-  taskDesc
-) {
-  let task = document.createElement("div");
-  task.className = "task";
-  task.dataset.priority = taskPrior;
-  task.dataset.isGenerated = "false";
-
-  let taskNameSpan = document.createElement("span");
-  taskNameSpan.className = "task-name";
-  taskNameSpan.textContent = taskName;
-
-  let taskTypeSpan = document.createElement("span");
-  taskTypeSpan.className = "task-type";
-  taskTypeSpan.textContent = taskType;
-
-  let taskPriorSpan = document.createElement("span");
-  taskPriorSpan.className = "task-prior";
-  taskPriorSpan.textContent = `${taskPrior} priority`;
-
-  let taskStartSpan = document.createElement("span");
-  taskStartSpan.className = "task-start";
-  taskStartSpan.textContent = taskStart;
-
-  let taskEndSpan = document.createElement("span");
-  taskEndSpan.className = "task-end";
-  taskEndSpan.textContent = taskEnd;
-
-  let taskDescPar = document.createElement("p");
-  taskDescPar.className = "task-desc";
-  taskDescPar.textContent = taskDesc;
-
-  task.append(
-    taskNameSpan,
-    taskTypeSpan,
-    taskPriorSpan,
-    taskStartSpan,
-    taskEndSpan,
-    taskDescPar
-  );
-
-  task.onclick = function () {
-    showTaskInfoModal(task);
-  };
-
-  let days = document.querySelectorAll(".schedule .day");
-  days.forEach((day) => {
-    let dayName = day.querySelector(".head").textContent;
-    if (dayName.toLowerCase().trim() === taskDay.toLowerCase().trim()) {
-      day.querySelector(".tasks").appendChild(task);
-    }
-  });
-}
-
-export function showTaskInfoModal(task) {
-  let createLabel = function (forAtt, className, text) {
-    let label = document.createElement("label");
-    label.className = className;
-    label.setAttribute("for", forAtt);
-    label.textContent = text;
-    return label;
-  };
-
-  let taskPropBox = document.createElement("div");
-  let overlay = document.createElement("div");
-
-  taskPropBox.className = "task-prop-box";
-  overlay.className = "overlay";
-
-  // create box content
-  // box title
-  let boxTitle = document.createElement("span");
-  boxTitle.className = "task-prop-box-title";
-  boxTitle.textContent = "task properties";
-
-  // close box button
-  let closeIcon = document.createElement("i");
-  closeIcon.className = "fa-solid fa-xmark";
-  let closeBtn = document.createElement("button");
-  closeBtn.className = "close-btn";
-  closeBtn.appendChild(closeIcon);
-  closeBtn.onclick = () => {
-    overlay.remove();
-    taskPropBox.remove();
-  };
-
-  // add input fields
-  let fieldContainer = document.createElement("div");
-  fieldContainer.className = "task-prop-field";
-  // name
-  let nameLabel = createLabel("task-name-field", "task-prop-label", "Name");
-
-  let nameField = document.createElement("input");
-  nameField.type = "text";
-  nameField.id = "task-name-field";
-  nameField.className = "task-prop-input-field";
-  nameField.value = task.querySelector(".task-name").textContent;
-
-  let nameFieldContainer = fieldContainer.cloneNode(true);
-  nameFieldContainer.append(nameLabel, nameField);
-
-  // type
-  let typeLabel = createLabel("task-type-field", "task-prop-label", "Type");
-
-  let typeList = document.createElement("select");
-  typeList.id = "task-type-field";
-  typeList.className = "task-prop-input-field";
-
-  let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
-  for (let type of types) {
-    let option = document.createElement("option");
-    option.value = type;
-    option.textContent = type;
-    typeList.appendChild(option);
-  }
-
-  typeList.value = task.querySelector(".task-type").textContent;
-
-  let typeFieldContainer = fieldContainer.cloneNode(true);
-  typeFieldContainer.append(typeLabel, typeList);
-
-  // priority
-  let priorLabel = createLabel(
-    "task-prior-field",
-    "task-prop-label",
-    "Priority"
-  );
-
-  let priorList = document.createElement("select");
-  priorList.id = "task-prior-field";
-  priorList.className = "task-prop-input-field";
-
-  let priorOption1 = document.createElement("option");
-  priorOption1.value = "top";
-  priorOption1.textContent = "Top";
-
-  let priorOption2 = document.createElement("option");
-  priorOption2.value = "high";
-  priorOption2.textContent = "High";
-
-  let priorOption3 = document.createElement("option");
-  priorOption3.value = "medium";
-  priorOption3.textContent = "Medium";
-
-  let priorOption4 = document.createElement("option");
-  priorOption4.value = "low";
-  priorOption4.textContent = "Low";
-
-  priorList.append(priorOption1, priorOption2, priorOption3, priorOption4);
-  priorList.value = task.dataset.priority;
-  let priorFieldContainer = fieldContainer.cloneNode(true);
-  priorFieldContainer.append(priorLabel, priorList);
-
-  // start time
-  let startTimeLabel = createLabel(
-    "task-start-field",
-    "task-prop-label",
-    "Start"
-  );
-  let startTimeField = document.createElement("input");
-  startTimeField.type = "time";
-  startTimeField.id = "task-start-field";
-  startTimeField.className = "task-prop-input-field";
-  startTimeField.value = task.querySelector(".task-start").textContent;
-
-  let startTimeFieldContainer = fieldContainer.cloneNode(true);
-  startTimeFieldContainer.append(startTimeLabel, startTimeField);
-
-  // end time
-  let endTimeLabel = createLabel("task-end-field", "task-prop-label", "End");
-  let endTimeField = document.createElement("input");
-  endTimeField.type = "time";
-  endTimeField.id = "task-end-field";
-  endTimeField.className = "task-prop-input-field";
-  endTimeField.value = task.querySelector(".task-end").textContent;
-
-  let endTimeFieldContainer = fieldContainer.cloneNode(true);
-  endTimeFieldContainer.append(endTimeLabel, endTimeField);
-
-  // description
-  let descLabel = createLabel(
-    "task-desc-field",
-    "task-prop-label",
-    "Description"
-  );
-  let descField = document.createElement("textarea");
-  descField.id = "task-desc-field";
-  descField.className = "task-prop-input-field";
-  descField.value = task.querySelector(".task-desc").textContent;
-
-  let descFieldContainer = fieldContainer.cloneNode(true);
-  descFieldContainer.append(descLabel, descField);
-
-  // options
-  let optionsSection = document.createElement("div");
-  optionsSection.className = "options";
-
-  let doneBtn = document.createElement("button");
-  doneBtn.className = `btn done-btn`;
-  doneBtn.textContent = "Done";
-  doneBtn.onclick = () => {
-    // save data
-    task.dataset.priority = priorList.value;
-    task.querySelector(".task-name").textContent = nameField.value;
-    task.querySelector(".task-type").textContent = typeList.value;
-    task.querySelector(
-      ".task-prior"
-    ).textContent = `${priorList.value} priority`;
-    task.querySelector(".task-start").textContent = startTimeField.value;
-    task.querySelector(".task-end").textContent = endTimeField.value;
-    task.querySelector(".task-desc").textContent = descField.value;
-
-    let schedule = sortSchedule(scheduleToJson());
-    updateSchedule(schedule);
-    saveUserInfo({
-      schedule: scheduleToJson(),
-    });
-
-    overlay.remove();
-    taskPropBox.remove();
-  };
-
-  let deleteBtn = document.createElement("button");
-  deleteBtn.className = `btn delete-btn`;
-  deleteBtn.textContent = "Delete";
-  deleteBtn.onclick = () => {
-    task.remove();
-    saveUserInfo({
-      schedule: scheduleToJson(),
-    });
-
-    overlay.remove();
-    taskPropBox.remove();
-    setupTodaySettings();
-  };
-
-  let cancelBtn = document.createElement("button");
-  cancelBtn.className = `btn cancel-btn`;
-  cancelBtn.textContent = "Cancel";
-  cancelBtn.onclick = () => {
-    overlay.remove();
-    taskPropBox.remove();
-  };
-
-  optionsSection.append(doneBtn, deleteBtn, cancelBtn);
-
-  taskPropBox.append(
-    boxTitle,
-    closeBtn,
-    nameFieldContainer,
-    typeFieldContainer,
-    priorFieldContainer,
-    startTimeFieldContainer,
-    endTimeFieldContainer,
-    descFieldContainer,
-    optionsSection
-  );
-  document.body.append(overlay, taskPropBox);
 }
