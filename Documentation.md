@@ -28,16 +28,18 @@ The application is built using a **Modular Monolith** pattern:
 ## 🚀 Detailed Feature Set
 
 ### 1. Automated Study Induction
-Unlike static calendars, Studo analyzes the string content of your tasks. If a task name contains the keyword "Lecture", the system treats it as a trigger for a future study session.
+Unlike static calendars, Studo analyzes the content of your tasks. If a task has the type "Lecture", the system treats it as a trigger for a future study session.
 
 ### 2. Priority-Based Visual Hierarchy
-The UI supports three distinct priority data-attributes:
-* `top`: Immediate attention required.
-* `medium`: Standard academic tasks.
-* `low`: Supplemental reading or non-essential study.
+The UI supports five distinct priority data-attributes, depending on the priority that the user wants to give each task:
+* `top`
+* `high`
+* `medium`
+* `low`
+* `none`
 
 ### 3. Smart Buffer Management
-The system prevents "Back-to-Back Burnout" by referencing a `DEFAULT_DAY_END` and adding a 2-hour buffer between the conclusion of the final daily task and any newly generated study sessions.
+The system prevents "Back-to-Back Burnout" by adding a 2-hour buffer between the conclusion of the final daily task and any newly generated study sessions.  It will also move study sessions to different days depending on available time.
 
 ---
 
@@ -45,9 +47,4 @@ The system prevents "Back-to-Back Burnout" by referencing a `DEFAULT_DAY_END` an
 
 The scheduling engine uses a list-processing algorithm to transform raw user input into an optimized plan.
 
-```python
-# The algorithm performs the following:
-1. Identifies the "Lecture" suffix in task names.
-2. Calculates the 'tomorrow' index using: (current_day + 1) % 7.
-3. Parses 24-hour time strings into integer tuples for math operations.
-4. Appends new dictionary objects with 'low' priority to the next day's list.
+The engine extracts lecture items out of the schedule and schedules study sessions, setting their times, dates and durations depending on each day's end-time and user-set priorities.
