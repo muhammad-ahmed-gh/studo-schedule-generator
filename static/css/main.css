@@ -2,7 +2,7 @@
 :root {
   /* main colors */
   --main-color: #1787ff;
-  --main-color-alt: #8731ff;
+  --main-color-alt: #066dfd;
   --light-text-color: #676767;
   --light-text-color-alt: #444;
   --main-border-color: #e3e3e3;
@@ -19,6 +19,7 @@
   --high-prior: #fa5656;
   --mid-prior: #ffbb00;
   --low-prior: #2ee677;
+  --none-prior: #adadad;
 
   /* scroll */
   --scroll-width: 8px;
@@ -143,9 +144,8 @@ ul {
 }
 
 .btn:hover {
-  background-color: white;
-  color: var(--main-color);
-  border-color: var(--main-color);
+  background-color: var(--main-color-alt);
+  transform: translateY(-3px);
 }
 
 .container {
@@ -188,6 +188,7 @@ header {
   width: 100%;
   border-bottom: 1px var(--main-border-color) solid;
   background-color: white;
+  z-index: 10;
 }
 
 header .container {
@@ -356,6 +357,19 @@ main .user {
   text-transform: uppercase;
 }
 
+main .user .text:focus {
+  outline: 1px dashed var(--main-color);
+  border-radius: 5px;
+}
+
+main .edit-user {
+  position: relative;
+  font-size: 16px;
+  top: -27px;
+  right: 6px;
+  cursor: pointer;
+}
+
 main .msg {
   margin: 20px auto;
   padding: 15px;
@@ -426,7 +440,8 @@ main .day .tasks {
   gap: 10px;
   padding: 15px;
   height: 400px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 main .tasks::-webkit-scrollbar {
@@ -481,6 +496,10 @@ main .task[data-priority="medium"] {
 
 main .task[data-priority="low"] {
   --task-color: var(--low-prior);
+}
+
+main .task[data-priority="none"] {
+  --task-color: var(--none-prior);
 }
 
 main .task .task-name {
@@ -559,7 +578,7 @@ footer .social {
   margin-top: 10px;
   display: flex;
   justify-content: center;
-  gap: 7px;
+  gap: 10px;
 }
 
 footer .social a {
