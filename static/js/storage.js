@@ -6,10 +6,12 @@ export function scheduleToJson() {
     tasks.forEach((task) => {
       let taskObj = {
         taskName: task.querySelector(".task-name").textContent,
-        priority: task.dataset.priority,
-        start: task.querySelector(".task-start").textContent,
-        end: task.querySelector(".task-end").textContent,
-        desc: task.querySelector(".task-desc").textContent,
+        taskType: task.querySelector(".task-type").textContent,
+        taskPriority: task.dataset.priority,
+        taskStart: task.querySelector(".task-start").textContent,
+        taskEnd: task.querySelector(".task-end").textContent,
+        taskDesc: task.querySelector(".task-desc").textContent,
+        isGenerated: (task.dataset.isGenerated === "true"),
       };
       schedule[i].push(taskObj);
     });

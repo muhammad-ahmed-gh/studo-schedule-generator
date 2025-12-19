@@ -40,8 +40,8 @@ export function setTitles() {
 
 let sortDayTasks = function (tasks) {
   return tasks.slice().sort((a, b) => {
-    const [aH, aM] = a.start.split(":").map(Number);
-    const [bH, bM] = b.start.split(":").map(Number);
+    const [aH, aM] = a.taskStart.split(":").map(Number);
+    const [bH, bM] = b.taskStart.split(":").map(Number);
     return aH - bH || aM - bM; // sort by hours, then minutes
   });
 };
@@ -63,30 +63,36 @@ export function updateSchedule(schedule) {
     dayTasks.forEach((task) => {
       let taskElement = document.createElement("div");
       taskElement.className = "task";
-      taskElement.dataset.priority = task.priority;
+      taskElement.dataset.priority = task.taskPriority;
+      taskElement.dataset.isGenerated = task.isGenerated? "true" : "false";
 
       let taskNameSpan = document.createElement("span");
       taskNameSpan.className = "task-name";
       taskNameSpan.textContent = task.taskName;
 
+      let taskTypeSpan = document.createElement("span");
+      taskTypeSpan.className = "task-type";
+      taskTypeSpan.textContent = task.taskType;
+
       let taskPriorSpan = document.createElement("span");
       taskPriorSpan.className = "task-prior";
-      taskPriorSpan.textContent = `${task.priority} priority`;
+      taskPriorSpan.textContent = `${task.taskPriority} priority`;
 
       let taskStartSpan = document.createElement("span");
       taskStartSpan.className = "task-start";
-      taskStartSpan.textContent = task.start;
+      taskStartSpan.textContent = task.taskStart;
 
       let taskEndSpan = document.createElement("span");
       taskEndSpan.className = "task-end";
-      taskEndSpan.textContent = task.end;
+      taskEndSpan.textContent = task.taskEnd;
 
       let taskDescPar = document.createElement("p");
       taskDescPar.className = "task-desc";
-      taskDescPar.textContent = task.desc;
+      taskDescPar.textContent = task.taskDesc;
 
       taskElement.append(
         taskNameSpan,
+        taskTypeSpan,
         taskPriorSpan,
         taskStartSpan,
         taskEndSpan,
@@ -94,7 +100,7 @@ export function updateSchedule(schedule) {
       );
 
       taskElement.onclick = function () {
-        showTaskProperties(taskElement);
+        showTaskInfoModal(taskElement);
       };
 
       days[i].appendChild(taskElement);
@@ -104,6 +110,7 @@ export function updateSchedule(schedule) {
 
 export function addTaskToSchedule(
   taskName,
+  taskType,
   taskPrior,
   taskDay,
   taskStart,
@@ -113,10 +120,15 @@ export function addTaskToSchedule(
   let task = document.createElement("div");
   task.className = "task";
   task.dataset.priority = taskPrior;
+  task.dataset.isGenerated = "false";
 
   let taskNameSpan = document.createElement("span");
   taskNameSpan.className = "task-name";
   taskNameSpan.textContent = taskName;
+
+  let taskTypeSpan = document.createElement("span");
+  taskTypeSpan.className = "task-type";
+  taskTypeSpan.textContent = taskType;
 
   let taskPriorSpan = document.createElement("span");
   taskPriorSpan.className = "task-prior";
@@ -136,6 +148,7 @@ export function addTaskToSchedule(
 
   task.append(
     taskNameSpan,
+    taskTypeSpan,
     taskPriorSpan,
     taskStartSpan,
     taskEndSpan,
@@ -143,7 +156,7 @@ export function addTaskToSchedule(
   );
 
   task.onclick = function () {
-    showTaskProperties(task);
+    showTaskInfoModal(task);
   };
 
   let days = document.querySelectorAll(".schedule .day");
@@ -155,7 +168,7 @@ export function addTaskToSchedule(
   });
 }
 
-export function showTaskProperties(task) {
+export function showTaskInfoModal(task) {
   let createLabel = function (forAtt, className, text) {
     let label = document.createElement("label");
     label.className = className;
@@ -201,6 +214,26 @@ export function showTaskProperties(task) {
 
   let nameFieldContainer = fieldContainer.cloneNode(true);
   nameFieldContainer.append(nameLabel, nameField);
+
+  // type
+  let typeLabel = createLabel("task-type-field", "task-prop-label", "Type");
+
+  let typeList = document.createElement("select");
+  typeList.id = "task-type-field";
+  typeList.className = "task-prop-input-field";
+
+  let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
+  for (let type of types) {
+    let option = document.createElement("option");
+    option.value = type;
+    option.textContent = type;
+    typeList.appendChild(option);
+  }
+
+  typeList.value = task.querySelector(".task-type").textContent;
+
+  let typeFieldContainer = fieldContainer.cloneNode(true);
+  typeFieldContainer.append(typeLabel, typeList);
 
   // priority
   let priorLabel = createLabel(
@@ -285,6 +318,7 @@ export function showTaskProperties(task) {
     // save data
     task.dataset.priority = priorList.value;
     task.querySelector(".task-name").textContent = nameField.value;
+    task.querySelector(".task-type").textContent = typeList.value;
     task.querySelector(
       ".task-prior"
     ).textContent = `${priorList.value} priority`;
@@ -330,6 +364,7 @@ export function showTaskProperties(task) {
     boxTitle,
     closeBtn,
     nameFieldContainer,
+    typeFieldContainer,
     priorFieldContainer,
     startTimeFieldContainer,
     endTimeFieldContainer,

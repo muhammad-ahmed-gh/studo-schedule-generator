@@ -3,10 +3,12 @@ import * as storage from "./storage.js";
 
 let setupTaskClick = function () {
   let tasks = document.querySelectorAll(".task");
-  tasks.forEach((task) => (task.onclick = () => chores.showTaskProperties(task)));
+  tasks.forEach(
+    (task) => (task.onclick = () => chores.showTaskInfoModal(task))
+  );
 };
 
-let showAddTaskProperties = function () {
+let showAddTaskModal = function () {
   let createLabel = function (forAtt, className, text) {
     let label = document.createElement("label");
     label.className = className;
@@ -51,6 +53,27 @@ let showAddTaskProperties = function () {
 
   let nameFieldContainer = fieldContainer.cloneNode(true);
   nameFieldContainer.append(nameLabel, nameField);
+
+  // type
+  let typeLabel = createLabel("task-type-field", "task-prop-label", "Type");
+
+  let typeList = document.createElement("select");
+  typeList.id = "task-type-field";
+  typeList.className = "task-prop-input-field";
+
+  let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
+  for (let type of types) {
+    let option = document.createElement("option");
+    option.value = type;
+    option.textContent = type;
+    typeList.appendChild(option);
+  }
+
+  // default value
+  typeList.value = "lecture";
+
+  let typeFieldContainer = fieldContainer.cloneNode(true);
+  typeFieldContainer.append(typeLabel, typeList);
 
   // priority
   let priorLabel = createLabel(
@@ -139,6 +162,7 @@ let showAddTaskProperties = function () {
   doneBtn.onclick = () => {
     chores.addTaskToSchedule(
       nameField.value,
+      typeList.value,
       priorList.value,
       dayList.value,
       startTimeField.value,
@@ -172,6 +196,7 @@ let showAddTaskProperties = function () {
     boxTitle,
     closeBtn,
     nameFieldContainer,
+    typeFieldContainer,
     priorFieldContainer,
     dayFieldContainer,
     startTimeFieldContainer,
@@ -184,7 +209,7 @@ let showAddTaskProperties = function () {
 
 let setupAddTaskBtn = function () {
   let addTaskBtn = document.querySelector("main .add-task");
-  addTaskBtn.onclick = showAddTaskProperties;
+  addTaskBtn.onclick = showAddTaskModal;
 };
 
 let setupGenerateBtn = function () {
@@ -207,8 +232,7 @@ let setupGenerateBtn = function () {
 };
 
 let userInfo = storage.loadUserInfo();
-if(userInfo)
-  chores.updateSchedule(userInfo);
+if (userInfo) chores.updateSchedule(userInfo);
 chores.setupMenuBtn();
 setupTaskClick();
 setupAddTaskBtn();
