@@ -1,6 +1,7 @@
 import * as util from "./util.js";
 import { AppStorage } from "./AppStorage.js";
 import { Task } from "./Task.js";
+import {Valid} from "./Valid.js";
 
 class Main {
   static showAddTaskModal() {
@@ -156,27 +157,35 @@ class Main {
     doneBtn.className = `btn done-btn`;
     doneBtn.textContent = "Done";
     doneBtn.onclick = () => {
-      let task = Task.createTask(
-        nameField.value,
-        typeList.value,
-        priorList.value,
-        startTimeField.value,
-        endTimeField.value,
-        descField.value,
-        false
-      );
-      Task.addToSchedule(task, dayList.value);
+      if (
+        Valid.validateNewTask(
+          nameField.value,
+          startTimeField.value,
+          endTimeField.value
+        )
+      ) {
+        let task = Task.createTask(
+          nameField.value,
+          typeList.value,
+          priorList.value,
+          startTimeField.value,
+          endTimeField.value,
+          descField.value,
+          false
+        );
+        Task.addToSchedule(task, dayList.value);
 
-      let schedule = AppStorage.scheduleToJson();
-      schedule = util.sortSchedule(schedule);
-      util.updateSchedule(schedule);
-      AppStorage.saveSchedule({
-        schedule: schedule,
-      });
+        let schedule = AppStorage.scheduleToJson();
+        schedule = util.sortSchedule(schedule);
+        util.updateSchedule(schedule);
+        AppStorage.saveSchedule({
+          schedule: schedule,
+        });
 
-      overlay.remove();
-      taskPropBox.remove();
-      util.setupTodaySettings();
+        overlay.remove();
+        taskPropBox.remove();
+        util.setupTodaySettings();
+      }
     };
 
     let cancelBtn = document.createElement("button");
@@ -219,7 +228,7 @@ class Main {
         userNameText.setAttribute("contenteditable", false);
         if (userNameText.textContent === "")
           userNameText.textContent = oldUserName;
-        
+
         window.localStorage.setItem("username", userNameText.textContent);
       };
     };

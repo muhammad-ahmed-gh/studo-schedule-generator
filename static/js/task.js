@@ -1,5 +1,6 @@
 import * as util from "./util.js";
 import { AppStorage } from "./AppStorage.js";
+import {Valid} from "./Valid.js";
 
 export class Task {
   static deleteTask(task) {
@@ -206,24 +207,33 @@ export class Task {
       textContent: "Done",
     });
     doneBtn.onclick = () => {
-      this.updateInfo(
-        task,
-        nameField.value,
-        typeList.value,
-        priorList.value,
-        startTimeField.value,
-        endTimeField.value,
-        descField.value
-      );
+      if (
+        Valid.validateEditedTask(
+          task,
+          nameField.value,
+          startTimeField.value,
+          endTimeField.value
+        )
+      ) {
+        this.updateInfo(
+          task,
+          nameField.value,
+          typeList.value,
+          priorList.value,
+          startTimeField.value,
+          endTimeField.value,
+          descField.value
+        );
 
-      let schedule = util.sortSchedule(AppStorage.scheduleToJson());
-      util.updateSchedule(schedule);
-      AppStorage.saveSchedule({
-        schedule: AppStorage.scheduleToJson(),
-      });
+        let schedule = util.sortSchedule(AppStorage.scheduleToJson());
+        util.updateSchedule(schedule);
+        AppStorage.saveSchedule({
+          schedule: AppStorage.scheduleToJson(),
+        });
 
-      overlay.remove();
-      taskPropBox.remove();
+        overlay.remove();
+        taskPropBox.remove();
+      }
     };
 
     let deleteBtn = util.createEle({
