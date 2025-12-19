@@ -31,7 +31,7 @@ def add_study_tasks(schedule: Schedule) -> Schedule:
             tomorrow = (i + 1) % 7
             study_task['taskName'] = task.get('taskName', '?UNKNOWN?')
             study_task['taskType'] = 'study'
-            study_task['taskPriority'] = task.get('taskPriority', 'low')
+            study_task['taskPrior'] = task.get('taskPrior', 'low')
             study_task['taskDesc'] = f"Study content of yesterday's {study_task['taskName']} lecture."
             study_task['isGenerated'] = True
             studies[tomorrow].append(study_task)
@@ -46,11 +46,11 @@ def schedule_tasks(tasks: Schedule, start: list[tuple[int, int]],
             continue
         tasks_by_priority = sorted(
             day, key=lambda d: \
-            {'high': 1, 'medium': 2, 'low': 3}[d.get('taskPriority', 'low')]
+            {'high': 1, 'medium': 2, 'low': 3}[d.get('taskPrior', 'low')]
         )
         for task in tasks_by_priority:
             hour, minute = start[i]
-            duration = 2 if task['taskPriority'] == 'high' else 1
+            duration = 2 if task['taskPrior'] == 'high' else 1
             j = i
             schedule_full = False
             for k in range(7):
