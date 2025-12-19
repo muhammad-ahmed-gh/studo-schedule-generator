@@ -1,13 +1,13 @@
-import * as chores from "./chores.js";
-import * as storage from "./storage.js";
+import * as util from "util.js";
+import { AppStorage } from "AppStorage.js";
 
 export class Task {
   static deleteTask(task) {
     task.remove();
-    storage.saveUserInfo({
-      schedule: storage.scheduleToJson(),
+    AppStorage.saveUserInfo({
+      schedule: AppStorage.scheduleToJson(),
     });
-    chores.setupTodaySettings();
+    util.setupTodaySettings();
   }
 
   static updateInfo(task, name, type, prior, start, end, desc) {
@@ -23,31 +23,30 @@ export class Task {
   }
 
   static showProperties(task) {
-    let taskPropBox = chores.createEle({
+    let taskPropBox = util.createEle({
       tagName: "div",
       className: "task-prop-box",
     });
 
-    let overlay = chores.createEle({
+    let overlay = util.createEle({
       tagName: "div",
       className: "overlay",
     });
 
-
     // create box content
     // box title
-    let boxTitle = chores.createEle({
+    let boxTitle = util.createEle({
       tagName: "span",
       className: "task-prop-box-title",
       textContent: "task properties",
     });
 
     // close box button
-    let closeIcon = chores.createEle({
+    let closeIcon = util.createEle({
       tagName: "i",
       className: "fa-solid fa-xmark",
     });
-    let closeBtn = chores.createEle({
+    let closeBtn = util.createEle({
       tagName: "button",
       className: "close-btn",
     });
@@ -58,20 +57,20 @@ export class Task {
     };
 
     // add input fields
-    let fieldContainer = chores.createEle({
+    let fieldContainer = util.createEle({
       tagName: "div",
       className: "task-prop-field",
     });
 
     // name
-    let nameLabel = chores.createEle({
+    let nameLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "Name",
     });
     nameLabel.setAttribute("for", "task-name-field");
 
-    let nameField = chores.createEle({
+    let nameField = util.createEle({
       tagName: "input",
       className: "task-prop-input-field",
       id: "task-name-field",
@@ -83,14 +82,14 @@ export class Task {
     nameFieldContainer.append(nameLabel, nameField);
 
     // type
-    let typeLabel = chores.createEle({
+    let typeLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "Type",
     });
     typeLabel.setAttribute("for", "task-type-field");
 
-    let typeList = chores.createEle({
+    let typeList = util.createEle({
       tagName: "select",
       className: "task-prop-input-field",
       id: "task-type-field",
@@ -98,7 +97,7 @@ export class Task {
 
     let types = ["lecture", "quiz", "assignment", "exam", "studytime", "other"];
     for (let type of types) {
-      let option = chores.createEle({
+      let option = util.createEle({
         tagName: "option",
         textContent: type,
       });
@@ -112,14 +111,14 @@ export class Task {
     typeFieldContainer.append(typeLabel, typeList);
 
     // priority
-    let priorLabel = chores.createEle({
+    let priorLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "Priority",
     });
     priorLabel.setAttribute("for", "task-prior-field");
 
-    let priorList = chores.createEle({
+    let priorList = util.createEle({
       tagName: "select",
       className: "task-prop-input-field",
       id: "task-prior-field",
@@ -127,7 +126,7 @@ export class Task {
 
     let priors = ["top", "high", "medium", "low"];
     for (let prior of priors) {
-      let option = chores.createEle({
+      let option = util.createEle({
         tagName: "option",
         textContent: prior,
       });
@@ -140,14 +139,14 @@ export class Task {
     priorFieldContainer.append(priorLabel, priorList);
 
     // start time
-    let startTimeLabel = chores.createEle({
+    let startTimeLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "Start",
     });
     startTimeLabel.setAttribute("for", "task-start-field");
 
-    let startTimeField = chores.createEle({
+    let startTimeField = util.createEle({
       tagName: "input",
       className: "task-prop-input-field",
       id: "task-start-field",
@@ -159,14 +158,14 @@ export class Task {
     startTimeFieldContainer.append(startTimeLabel, startTimeField);
 
     // end time
-    let endTimeLabel = chores.createEle({
+    let endTimeLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "End",
     });
     endTimeLabel.setAttribute("for", "task-end-field");
 
-    let endTimeField = chores.createEle({
+    let endTimeField = util.createEle({
       tagName: "input",
       className: "task-prop-input-field",
       id: "task-end-field",
@@ -178,14 +177,14 @@ export class Task {
     endTimeFieldContainer.append(endTimeLabel, endTimeField);
 
     // description
-    let descLabel = chores.createEle({
+    let descLabel = util.createEle({
       tagName: "label",
       className: "task-prop-label",
       textContent: "Description",
     });
     descLabel.setAttribute("for", "task-desc-field");
 
-    let descField = chores.createEle({
+    let descField = util.createEle({
       tagName: "textarea",
       className: "task-prop-input-field",
       id: "task-desc-field",
@@ -196,12 +195,12 @@ export class Task {
     descFieldContainer.append(descLabel, descField);
 
     // options
-    let optionsSection = chores.createEle({
+    let optionsSection = util.createEle({
       tagName: "div",
       className: "options",
     });
 
-    let doneBtn = chores.createEle({
+    let doneBtn = util.createEle({
       tagName: "button",
       className: "btn done-btn",
       textContent: "Done",
@@ -217,17 +216,17 @@ export class Task {
         descField.value
       );
 
-      let schedule = chores.sortSchedule(storage.scheduleToJson());
-      chores.updateSchedule(schedule);
-      storage.saveUserInfo({
-        schedule: storage.scheduleToJson(),
+      let schedule = util.sortSchedule(AppStorage.scheduleToJson());
+      util.updateSchedule(schedule);
+      AppStorage.saveUserInfo({
+        schedule: AppStorage.scheduleToJson(),
       });
 
       overlay.remove();
       taskPropBox.remove();
     };
 
-    let deleteBtn = chores.createEle({
+    let deleteBtn = util.createEle({
       tagName: "button",
       className: "btn delete-btn",
       textContent: "Delete",
@@ -238,7 +237,7 @@ export class Task {
       taskPropBox.remove();
     };
 
-    let cancelBtn = chores.createEle({
+    let cancelBtn = util.createEle({
       tagName: "button",
       className: "btn cancel-btn",
       textContent: "Cancel",
@@ -265,47 +264,47 @@ export class Task {
   }
 
   static createTask(name, type, prior, start, end, desc, isGenerated) {
-    let task = chores.createEle({
+    let task = util.createEle({
       tagName: "div",
       className: "task",
     });
     task.className = "task";
     task.dataset.priority = prior;
-    task.dataset.isGenerated = (isGenerated ? "true" : "false");
+    task.dataset.isGenerated = isGenerated ? "true" : "false";
 
-    let taskNameSpan = chores.createEle({
-      taskName: "span",
+    let taskNameSpan = util.createEle({
+      tagName: "span",
       className: "task-name",
       textContent: name,
       title: name,
     });
 
-    let taskTypeSpan = chores.createEle({
-      taskName: "span",
+    let taskTypeSpan = util.createEle({
+      tagName: "span",
       className: "task-type",
       textContent: type,
     });
 
-    let taskPriorSpan = chores.createEle({
-      taskName: "span",
+    let taskPriorSpan = util.createEle({
+      tagName: "span",
       className: "task-prior",
       textContent: `${prior} priority`,
     });
 
-    let taskStartSpan = chores.createEle({
-      taskName: "span",
+    let taskStartSpan = util.createEle({
+      tagName: "span",
       className: "task-start",
       textContent: start,
     });
 
-    let taskEndSpan = chores.createEle({
-      taskName: "span",
+    let taskEndSpan = util.createEle({
+      tagName: "span",
       className: "task-end",
       textContent: end,
     });
 
-    let taskDescPar = chores.createEle({
-      taskName: "p",
+    let taskDescPar = util.createEle({
+      tagName: "p",
       className: "task-desc",
       textContent: desc,
       title: desc,
@@ -320,9 +319,7 @@ export class Task {
       taskDescPar
     );
 
-    task.onclick = function () {
-      Task.showProperties(task);
-    };
+    task.onclick = () => this.showProperties(task);
 
     return task;
   }
