@@ -23,6 +23,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Check app starts
-        run: |
-          python app.py
+      ## this code listens to requests forever
+      # - name: Check app starts
+      #   run: |
+      #     python app.py
+
+      ## the app.py is imported (if there is an error, it won't be imported)
+      - name: Check code imports
+        run: python -c "import app"
