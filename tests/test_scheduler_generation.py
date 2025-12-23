@@ -18,7 +18,6 @@ def test_study_task_added_next_day():
     s = Scheduler(schedule)
     new_schedule = s.generate_study_tasks()
 
-    # Study task must be added to next day
     assert len(new_schedule[1]) == 1
     assert new_schedule[1][0]["taskType"] == "study"
 
