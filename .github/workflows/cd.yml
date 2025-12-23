@@ -1,0 +1,16 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deployment placeholder
+        ## no deployment done (just print a message)
+        run: echo "CI passed. Project is ready for deployment."
