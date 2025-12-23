@@ -10,8 +10,10 @@
 4. [How It Works](#️-how-it-works)
 5. [Classes Overview](#-classes-overview)
 6. [API Documentation](#-api-documentation)
-7. [Installation & Setup](#-installation--setup)
-8. [Future Enhancements](#-future-enhancements)
+7. [Testing](#-testing)
+8. [CI/CD](#-cicd)
+9. [Installation & Setup](#-installation--setup)
+10. [Future Enhancements](#-future-enhancements)
 
 ---
 
@@ -170,6 +172,59 @@ The project follows a **Modular Monolith** architecture, ensuring separation of 
 - **Request Body:** JSON representation of the current schedule.
 - **Response:** JSON representation of the updated schedule with generated study sessions.
 - **Description:** Processes the schedule and generates study tasks based on the provided input.
+
+---
+
+## 🧪 Testing
+
+The project includes comprehensive test suites to ensure the reliability and correctness of both backend and frontend components.
+
+### Backend Tests (Python)
+
+- **Location:** `tests/test_priority.py` and `tests/test_scheduler_generation.py`
+- **Framework:** Uses Python's built-in testing capabilities (e.g., assertions in functions).
+- **Coverage:**
+  - Tests for the [`Scheduler`](src/priority.py) class, including study task generation, task removal, and priority sorting.
+  - Validates logic for generating study tasks based on lecture schedules and handling edge cases like no lectures.
+- **Running Tests:** Execute the test files directly with Python, e.g., `python tests/test_priority.py`. For automated testing, integrate with tools like pytest.
+
+### Frontend Tests (JavaScript)
+
+- **Location:** `tests/test_frontend_logic.js`
+- **Framework:** Jest with jsdom for DOM simulation.
+- **Coverage:**
+  - Tests for task creation, validation, and schedule sorting in the frontend classes like [`Task`](static/js/task.js), [`Valid`](static/js/Valid.js), and [`Util`](static/js/util.js).
+  - Ensures UI logic, such as form validation and task updates, works correctly.
+- **Running Tests:** Use the npm script defined in [`package.json`](package.json): `npm test`.
+
+All tests are designed to run in a CI environment to catch regressions early.
+
+---
+
+## 🔄 CI/CD
+
+The project uses GitHub Actions for Continuous Integration (CI) and Continuous Deployment (CD) to automate testing and deployment processes.
+
+### Continuous Integration (CI)
+
+- **Workflow File:** `.github/workflows/ci.yml`
+- **Triggers:** Runs on pushes to the `main` branch and on pull requests.
+- **Steps:**
+  - Checks out the repository.
+  - Sets up Python 3.11.
+  - Installs dependencies from [`requirements.txt`](requirements.txt).
+  - Verifies that the Flask app can be imported without errors (checks for syntax and import issues).
+- **Purpose:** Ensures code quality and that the application starts correctly before merging changes.
+
+### Continuous Deployment (CD)
+
+- **Workflow File:** `.github/workflows/cd.yml`
+- **Triggers:** Runs after the CI workflow completes successfully.
+- **Steps:**
+  - Currently a placeholder that prints a confirmation message: "CI passed. Project is ready for deployment."
+- **Purpose:** Prepares for future deployment automation, such as deploying to a cloud service (e.g., Heroku, AWS).
+
+These workflows help maintain code quality and streamline the release process.
 
 ---
 
