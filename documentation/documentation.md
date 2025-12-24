@@ -238,27 +238,27 @@ These workflows help maintain code quality and streamline the release process.
 
 ### Steps
 
-1. Clone the repository:
+- Clone the repository:
 
 ```bash
 git clone https://github.com/muhammad-ahmed-gh/schedule-generator.git
 cd schedule-generator
 ```
 
-2. Install dependencies
+- Install dependencies
 
 ```bash
 pip install flask
 ```
 
-3. Run the application
+- Run the application
 
 ```bash
 python app.py
 ```
 
-4. Open the application in your browser:
-   - Navigate to `http://127.0.0.1:5000`.
+- Open the application in your browser:
+  - Navigate to `http://127.0.0.1:5000`.
 
 ---
 
