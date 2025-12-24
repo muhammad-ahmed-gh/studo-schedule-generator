@@ -1,2 +1,5 @@
 *.pyc
 src/__pycache__
+
+documentation/*.xml
+documentation/*.drawio
