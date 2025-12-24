@@ -172,7 +172,7 @@ class Main {
       className: "task-prop-label",
       textContent: "End",
     });
-    endTimeField.setAttribute("for", "task-end-field");
+    endTimeLabel.setAttribute("for", "task-end-field");
 
     let endTimeField = Util.createEle({
       tagName: "input",
