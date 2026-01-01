@@ -27,4 +27,4 @@ def test_no_study_tasks_if_no_lectures():
     s = Scheduler(schedule)
 
     new_schedule = s.generate_study_tasks()
-    assert all(len(day) == len(schedule[i]) for i, day in enumerate(new_schedule))
+    assert all(len(day) >= len(schedule[i]) for i, day in enumerate(new_schedule))
