@@ -186,16 +186,16 @@ The project includes comprehensive test suites to ensure the reliability and cor
 - **Coverage:**
   - Tests for the [`Scheduler`](src/priority.py) class, including study task generation, task removal, and priority sorting.
   - Validates logic for generating study tasks based on lecture schedules and handling edge cases like no lectures.
-- **Running Tests:** Execute the test files directly with Python, e.g., `python tests/test_priority.py`. For automated testing, integrate with tools like pytest.
+- **Running Tests:** Execute the test files by running `python -m pytest` in the program directory.
 
 ### Frontend Tests (JavaScript)
 
-- **Location:** `tests/test_frontend_logic.js`
+- **Location:** `tests/frontend_logic.test.js`
 - **Framework:** Jest with jsdom for DOM simulation.
 - **Coverage:**
   - Tests for task creation, validation, and schedule sorting in the frontend classes like [`Task`](static/js/task.js), [`Valid`](static/js/Valid.js), and [`Util`](static/js/util.js).
   - Ensures UI logic, such as form validation and task updates, works correctly.
-- **Running Tests:** Use the npm script defined in [`package.json`](package.json): `npm test`.
+- **Running Tests:** Execute the test file by running '$env:NODE_OPTIONS="--experimental-vm-modules"; npx jest tests/frontend_logic.test.js' in the program directory.
 
 All tests are designed to run in a CI environment to catch regressions early.
 
