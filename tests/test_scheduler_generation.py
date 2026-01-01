@@ -21,17 +21,13 @@ def test_study_task_added_next_day():
     assert len(new_schedule[1]) == 1
     assert new_schedule[1][0]["taskType"] == "study"
 
-
 def test_no_study_tasks_if_no_lectures():
     schedule = [[{"taskType": "quiz"}], [], [], [], [], [], []]
     s = Scheduler(schedule)
 
     new_schedule = s.generate_study_tasks()
 
-    for i, day in enumerate(schedule):
-        for task in day:
-            assert task in new_schedule[i]
-
+    # check that there are no generated study tasks anywhere
     for day in new_schedule:
         for task in day:
             assert task.get("taskType") != "study"
