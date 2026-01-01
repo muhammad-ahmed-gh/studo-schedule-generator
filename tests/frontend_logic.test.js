@@ -13,8 +13,8 @@ beforeAll(async () => {
 
 
 describe("Frontend logic tests", () => {
-  test("Task.createTask creates a valid task", () => {
-    const task = Task.createTask(
+  test("Task.createTask creates a valid task", async () => {
+    const task = await Task.createTask(
       "AI",
       "lecture",
       "high",
@@ -23,11 +23,12 @@ describe("Frontend logic tests", () => {
       "Intro to AI",
       false
     );
-
-    expect(task.taskName).toBe("AI");
-    expect(task.taskType).toBe("lecture");
-    expect(task.isGenerated).toBe(false);
+  
+    // Check that the DOM element contains the correct info
+    expect(task.querySelector(".task-name").textContent).toBe("AI");
+    expect(task.className).toContain("lecture"); // or whatever class Task sets
   });
+
 
   test("Validation rejects invalid time range", () => {
     expect(Valid.validateNewTask("Task", "14:00", "12:00")).toBe(false);
