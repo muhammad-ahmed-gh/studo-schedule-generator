@@ -24,9 +24,8 @@ describe("Frontend logic tests", () => {
       false
     );
   
-    // Check that the DOM element contains the correct info
     expect(task.querySelector(".task-name").textContent).toBe("AI");
-    expect(task.className).toContain("lecture"); // or whatever class Task sets
+    expect(task.className).toContain("lecture");
   });
 
 
