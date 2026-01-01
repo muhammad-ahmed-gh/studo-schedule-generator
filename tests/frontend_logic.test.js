@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { Util } from "../static/js/Util.js";
-import { Valid } from "../static/js/Valid.js";
-import { Task } from "../static/js/Task.js";
+const Util = require("../static/js/Util.js");
+const Valid = require("../static/js/Valid.js");
+const Task = require("../static/js/Task.js");
 
 describe("Frontend logic tests", () => {
   test("Task.createTask creates a valid task", () => {
