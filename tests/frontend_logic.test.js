@@ -1,14 +1,10 @@
-/**
- * @jest-environment jsdom
- */
-
 let Util, Valid, Task;
 
 beforeAll(async () => {
   // dynamically import your ES modules
-  Util = await import("../static/js/Util.js");
-  Valid = await import("../static/js/Valid.js");
-  Task = await import("../static/js/Task.js");
+  ({ Util } = await import("../static/js/Util.js"));
+  ({ Valid } = await import("../static/js/Valid.js"));
+  ({ Task } = await import("../static/js/Task.js"));
 });
 
 describe("Frontend logic tests", () => {
