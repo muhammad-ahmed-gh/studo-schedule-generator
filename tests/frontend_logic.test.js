@@ -2,9 +2,14 @@
  * @jest-environment jsdom
  */
 
-const Util = require("../static/js/Util.js");
-const Valid = require("../static/js/Valid.js");
-const Task = require("../static/js/Task.js");
+let Util, Valid, Task;
+
+beforeAll(async () => {
+  // dynamically import your ES modules
+  Util = await import("../static/js/Util.js");
+  Valid = await import("../static/js/Valid.js");
+  Task = await import("../static/js/Task.js");
+});
 
 describe("Frontend logic tests", () => {
   test("Task.createTask creates a valid task", () => {
