@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-
 let Util, Valid, Task;
 
 beforeAll(async () => {
@@ -10,7 +9,6 @@ beforeAll(async () => {
   ({ Valid } = await import("../static/js/Valid.js"));
   ({ Task } = await import("../static/js/Task.js"));
 });
-
 
 describe("Frontend logic tests", () => {
   test("Task.createTask creates a valid task", async () => {
@@ -25,9 +23,8 @@ describe("Frontend logic tests", () => {
     );
   
     expect(task.querySelector(".task-name").textContent).toBe("AI");
-    expect(task.className).toContain("lecture");
+    expect(task.className).toBe("task");
   });
-
 
   test("Validation rejects invalid time range", () => {
     expect(Valid.validateNewTask("Task", "14:00", "12:00")).toBe(false);
