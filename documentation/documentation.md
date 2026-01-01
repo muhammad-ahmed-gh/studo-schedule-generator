@@ -195,7 +195,7 @@ The project includes comprehensive test suites to ensure the reliability and cor
 - **Coverage:**
   - Tests for task creation, validation, and schedule sorting in the frontend classes like [`Task`](static/js/task.js), [`Valid`](static/js/Valid.js), and [`Util`](static/js/util.js).
   - Ensures UI logic, such as form validation and task updates, works correctly.
-- **Running Tests:** Execute the test file by running '$env:NODE_OPTIONS="--experimental-vm-modules"; npx jest tests/frontend_logic.test.js' in the program directory.
+- **Running Tests:** Execute the test file by running `$env:NODE_OPTIONS="--experimental-vm-modules"; npx jest tests/frontend_logic.test.js` in the program directory.
 
 All tests are designed to run in a CI environment to catch regressions early.
 
